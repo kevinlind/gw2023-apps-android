@@ -12,6 +12,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.myapplication.databinding.FragmentFirstBinding;
+import com.adobe.marketing.mobile.*;
 
 public class FirstFragment extends Fragment {
 
@@ -22,6 +23,24 @@ public class FirstFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+
+        MobileCore.setApplication(getActivity().getApplication());
+        MobileCore.setLogLevel(LoggingMode.VERBOSE);
+
+        try {
+            MobileCore.configureWithAppID("SAMPLE_APP_ID");
+            Lifecycle.registerExtension();
+            Identity.registerExtension();
+        } catch (InvalidInitException e) {
+            e.printStackTrace();
+        }
+
+        MobileCore.start(new AdobeCallback() {
+            @Override
+            public void call(Object o) {
+                MobileCore.lifecycleStart(null);
+            }
+        });
 
         binding = FragmentFirstBinding.inflate(inflater, container, false);
         return binding.getRoot();

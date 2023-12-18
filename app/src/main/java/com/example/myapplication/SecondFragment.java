@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.adobe.marketing.mobile.*;
 import com.example.myapplication.databinding.FragmentSecondBinding;
 
 import java.util.Random;
@@ -22,10 +23,35 @@ public class SecondFragment extends Fragment {
             LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState
     ) {
+        MobileCore.configureWithAppID("SAMPLE_APP_ID");
+
+        try {
+            Lifecycle.registerExtension();
+            Identity.registerExtension();
+        } catch (Exception e) {
+            // Log the exception
+        }    
+        MobileCore.start(new AdobeCallback () {
+            @Override
+            public void call(Object o) {
+                // Callback function
+            }
+        });
 
         binding = FragmentSecondBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobileCore.lifecycleStart(null);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobileCore.lifecyclePause();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -57,5 +83,4 @@ public class SecondFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

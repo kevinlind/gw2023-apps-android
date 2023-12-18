@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import com.adobe.marketing.mobile.*;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -28,6 +29,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        MobileCore.setApplication(this);
+        try {
+            MobileCore.start(new AdobeCallback() {
+            @Override public void call(Object o) {
+                MobileCore.configureWithAppID("SAMPLE_APP_ID");
+            }
+            });
+        } catch (InvalidInitException e) {
+            e.printStackTrace();
+        }
+
+        Identity.registerExtension();
+        Lifecycle.registerExtension();
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -45,6 +60,18 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobileCore.lifecycleStart(null);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobileCore.lifecyclePause();
     }
 
     @Override

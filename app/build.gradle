@@ -23,10 +23,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding true
     }
@@ -42,4 +44,16 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.espresso.core
+    implementation 'com.adobe.marketing.mobile:sdk-core:1.+'
+    implementation 'com.adobe.marketing.mobile:lifecycle:1.+'
+    implementation 'com.adobe.marketing.mobile:identity:1.+'
+}
+
+static {
+    MobileCore.configureWithAppId("SAMPLE_APP_ID");
+    HashMap<String, Object> data = new HashMap<String, Object>();
+    data.put("global.privacy", "optedout");
+    MobileCore.updateConfiguration(data);
+    MobileCore.configureWithFileInPath("absolute/path/to/exampleJSONfile.json");
+    MobileCore.configureWithFileInAssets("exampleJSONfile.json");
 }

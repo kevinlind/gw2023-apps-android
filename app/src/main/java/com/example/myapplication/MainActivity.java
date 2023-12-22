@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
-
 import com.google.android.material.snackbar.Snackbar;
+
+import com.adobe.marketing.mobile.MobileCore;
+import com.adobe.marketing.mobile.Lifecycle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -74,5 +76,18 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobileCore.setApplication(getApplication());
+        MobileCore.lifecycleStart(null);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobileCore.lifecyclePause();
     }
 }
